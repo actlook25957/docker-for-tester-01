@@ -302,7 +302,7 @@ in docker-compose add frontend-test service
     build: ./playwright
     container_name: frontend-test
     volumes:
-      - ./frontend-test-playwright-report:/app/report
+      - ./playwright/report:/app/report
 ```
 
 run service frontend-test
