@@ -49,7 +49,7 @@ try to push image
 docker push demo:1.0
 ```
 
-rename image
+copy demo:1.0 image and add tag to image
 ```
 docker image tag demo:1.0 <your_docker_username>/demo:1.0
 ```
@@ -79,7 +79,7 @@ create Dockerfile
 ```
 FROM postgres:16.0
 COPY table.sql /docker-entrypoint-initdb.d/1.sql
-COPY data.sql /docker-entrypoint-initdb.d/2.sq
+COPY data.sql /docker-entrypoint-initdb.d/2.sql
 ```
 
 build postgres image
@@ -89,7 +89,7 @@ docker image build -t demo-postgres:1.0 .
 
 run container from postgres image
 ```
-docker container run -d -e POSTGRES_USER=admin -POSTGRES_PASSWORD=1234 -e POSTGRES_DB=demo01 demo-postgres:1.0
+docker container run -d -e POSTGRES_USER=postgres -e POSTGRES_PASSWORD=1234 -e POSTGRES_DB=postgres --name db demo-postgres:1.0
 ```
 
 go insite db container
@@ -113,7 +113,12 @@ Get all data from table merchants
 select * from merchants;
 ```
 
-Quit
+Quit database
 ```
 \q
+```
+
+Quit container
+```
+exit
 ```
