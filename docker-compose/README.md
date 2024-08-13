@@ -27,10 +27,9 @@ docker-compose down
 
 create docker-compose.yml or docker-compose.yaml
 ```
-version: '3'
 services:
   web:
-    image: <your_docker_username>/demo:2.0
+    image: <your_docker_username>/demo:4.0
     build:
       context: ./nginx
       dockerfile: Dockerfile
@@ -46,7 +45,7 @@ or
 docker-compose up web -d
 ```
 
-## Use docker-compose build PostgresDB
+## Use docker-compose build PostgresDB (No Dockerfile)
 
 in docker-compose after web service
 ```
@@ -95,6 +94,8 @@ Quit
 \q
 ```
 
+## Workshop create Docker container Nginx with No Dockerfile
+
 ## Create backend (NodeJs) connect to PostgresDB
 
 **Start db service before start backend**
@@ -114,6 +115,7 @@ in docker-compose after db service
 ```
   backend:
     image: backend:1.0
+    container_name: backend
     build:
       context: ./backend
       dockerfile: Dockerfile
@@ -178,6 +180,7 @@ in docker-compose after backend service
 ```
   frontend:
     image: frontend:1.0
+    container_name: frontend
     build:
       context: ./frontend
       dockerfile: Dockerfile
@@ -190,6 +193,13 @@ run service frontend
 docker compose up frontend -d
 or
 docker-compose up frontend -d
+```
+
+Go to frontend web view
+```
+http://localhost:8888
+or
+http://127.0.0.1:8888
 ```
 
 ## Use depends_on and healthcheck
@@ -245,7 +255,7 @@ or
 docker-compose up frontend -d
 ```
 
-## Created end to end APIs test (Postman)
+## Created End to End APIs test (Postman)
 
 Open Postman -> Create Postman collection -> write test source code -> import to backend-testing folder
 
@@ -258,19 +268,20 @@ COPY  . .
 CMD [ "newman", "run", "<your_postman_collection_name>.postman_collection.json", "-r", "htmlextra,cli,junit" ]
 ```
 
-in docker-compose add backend_test service
+in docker-compose add backend-test service
 ```
-  backend_test:
+  backend-test:
     build: ./backend-testing
+    container_name: backend-test
     volumes:
       - ./backend-test-report:/etc/newman/newman
 ```
 
-run service backend_test
+run service backend-test
 ```
-docker compose up backend_test -d
+docker compose up backend-test
 or
-docker-compose up backend_test -d
+docker-compose up backend-test
 ```
 
 ## Created ui test (Playwright)
@@ -285,26 +296,27 @@ RUN npx playwright install
 CMD [ "npx", "playwright", "test" ]
 ```
 
-in docker-compose add frontend_test_playwright service
+in docker-compose add frontend-test service
 ```
-  frontend_test_playwright:
+  frontend-test:
     build: ./playwright
+    container_name: frontend-test
     volumes:
       - ./frontend-test-playwright-report:/app/report
 ```
 
-run service frontend_test_playwright
+run service frontend-test
 ```
-docker compose up frontend_test_playwright -d
+docker compose up frontend-test
 or
-docker-compose up frontend_test_playwright -d
+docker-compose up frontend-test
 ```
 
 ## Create Mountebank mock REST APIs
 
-in docker-compose add mock_api service
+in docker-compose add mock-api service
 ```
-  mock_api:
+  mock-api:
     image: mock-api:latest
     container_name: mock-api
     build:
@@ -315,12 +327,14 @@ in docker-compose add mock_api service
     ports:
       - 2525:2525
       - 8090:8090
+      - 8091:8091
+      - 4000:4000
     command: --configfile /imposters/imposters.ejs --allowInjection
 ```
 
-run service mock_api
+run service mock-api
 ```
-docker compose up mock_api -d
+docker compose up mock-api -d
 or
-docker-compose up mock_api -d
+docker-compose up mock-api -d
 ```
