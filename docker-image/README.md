@@ -120,14 +120,14 @@ Show all tables
 \dt
 ```
 
-Get all data from table merchants
-```
-select * from merchants;
-```
-
-Quit
+Quit database
 ```
 \q
+```
+
+Quit container
+```
+exit
 ```
 
 ## Workshop redis
