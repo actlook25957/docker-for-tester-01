@@ -1,107 +1,16 @@
 services:
   store-service:
-    image: store-service:0.0.1
-    container_name: store-service
-    build:
-      context: store-service
-    ports:
-      - "8000:8000"
-    # environment:
-    #   - STORE_WEB_HOST=http://localhost
-    depends_on:
-      store-db:
-        condition: service_healthy
-    restart: always
 
   point-service:
-    image: point-service:0.0.1
-    container_name: point-service
-    build:
-      context: point-service
-    ports:
-      - "8001:8001"
-    depends_on:
-      point-db:
-        condition: service_healthy
-    # extra_hosts:
-    #   - "host.docker.internal:host-gateway"
-    environment:
-      - DB_HOST=host.docker.internal
-      - DB_PORT=3307
-      - DB_USERNAME=user
-      - DB_PASSWORD=password
-    restart: always
 
   store-db:
-    image: mysql:8.3.0
-    container_name: store-db
-    environment:
-      - MYSQL_ROOT_PASSWORD=root
-      - MYSQL_USER=user
-      - MYSQL_PASSWORD=password
-      - MYSQL_DATABASE=store
-    volumes:
-      - ./tearup/store:/docker-entrypoint-initdb.d/
-    ports:
-      - "3306:3306"
-    restart: always
-    healthcheck:
-      test: ["CMD", "mysql", "-uroot", "-proot", "-e", "select * from store.users"]
-      interval: 3s
-      timeout: 5s
-      retries: 20
-      start_period: 5s
 
   point-db:
-    image: mysql:8.3.0
-    container_name: point-db
-    environment:
-      - MYSQL_ROOT_PASSWORD=root
-      - MYSQL_USER=user
-      - MYSQL_PASSWORD=password
-      - MYSQL_DATABASE=point
-    volumes:
-      - ./tearup/point:/docker-entrypoint-initdb.d/
-    ports:
-      - "3307:3306"
-    restart: always
-    healthcheck:
-      test: ["CMD", "mysqladmin" ,"ping", "-h", "localhost"]
-      interval: 3s
-      timeout: 5s
-      retries: 10
-      start_period: 5s
 
   bank-gateway:
-    image: store-bank-gateway:0.0.1
-    build:
-      context: thirdparty/bank-gateway
-    container_name: bank-gateway
-    restart: always
-    ports:
-      - "8882:8882"
 
   shipping-gateway:
-    image: store-shipping-gateway:0.0.1
-    build:
-      context: thirdparty/shipping-gateway
-    container_name: shipping-gateway
-    restart: always
-    ports:
-      - "8883:8882"
 
   store-web:
-    image: store-web:0.1.0
-    container_name: store-web
-    build:
-      context: store-web
-    ports:
-      - "3000:3000"
 
-  backend-test:
-    image: backend-test:1.0
-    build:
-      context: ./api-test
-      dockerfile: Dockerfile
-    volumes:
-      - ./api-test/report:/etc/newman/newman    
+  backend-test: 
