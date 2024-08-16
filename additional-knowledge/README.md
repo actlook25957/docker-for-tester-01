@@ -41,3 +41,18 @@ Pull image from TTL.sh
 ```
 docker pull ttl.sh/demo:2m  
 ```
+
+## Generate Simple Docker project with Docker init
+
+Command
+```
+docker init
+```
+
+Select your application platform
+
+![alt text](select-platform.png)
+
+Then do next steps until the end
+
+![alt text](next-step.png)
