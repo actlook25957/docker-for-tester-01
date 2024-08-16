@@ -122,3 +122,30 @@ Quit container
 ```
 exit
 ```
+
+## Verify Dockerfile with Docker Build Check
+
+Change directory to dockerfile folder and type command
+```
+docker build --check .
+```
+
+**Try error**
+
+In Dockerfile
+```
+FROM nginx:1.25.4
+CMD "echo Hello, world!"
+COPY index.html /usr/share/nginx/html/index.html
+```
+
+**Try error and return error for CI\CD**
+
+In Dockerfile
+```
+# check=error=true
+
+FROM nginx:1.25.4
+CMD "echo Hello, world!"
+COPY index.html /usr/share/nginx/html/index.html
+```
