@@ -1,11 +1,30 @@
 services:
   store-service:
+    environment:
+      - BANK_GATEWAY=
+      - SHIPPING_GATEWAY=
+      - DBCONNECTION=
 
   point-service:
+    environment:
+      - DB_HOST=
+      - DB_PORT=
+      - DB_USERNAME=
+      - DB_PASSWORD=
 
   store-db:
+    environment:
+      - MYSQL_ROOT_PASSWORD=root
+      - MYSQL_USER=user
+      - MYSQL_PASSWORD=password
+      - MYSQL_DATABASE=store
 
   point-db:
+    environment:
+      - MYSQL_ROOT_PASSWORD=root
+      - MYSQL_USER=user
+      - MYSQL_PASSWORD=password
+      - MYSQL_DATABASE=point
 
   bank-gateway:
 

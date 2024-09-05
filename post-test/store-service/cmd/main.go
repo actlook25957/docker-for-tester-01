@@ -26,8 +26,8 @@ import (
 
 func main() {
 
-	bankGatewayEndpoint := "bank-gateway:8882"
-	shippingGatewayEndpoint := "shipping-gateway:8882"
+	bankGatewayEndpoint := ""
+	shippingGatewayEndpoint := ""
 	pointGatewayEndpoint := "point-service:8001"
 	storeWebEndpoint := "http://localhost:3000"
 
@@ -44,7 +44,7 @@ func main() {
 		storeWebEndpoint = os.Getenv("STORE_WEB_HOST")
 	}
 
-	dbConnecton := "user:password@(store-db:3306)/store"
+	dbConnecton := ""
 	if os.Getenv("DBCONNECTION") != "" {
 		dbConnecton = os.Getenv("DBCONNECTION")
 	}
