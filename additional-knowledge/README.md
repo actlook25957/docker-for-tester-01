@@ -23,7 +23,7 @@ docker manifest inspect nginx:1.25.5
 
 ![alt text](dockerize.png)
 
-## Use TTL.sh, Anonymous & ephemeral Docker iamge registry
+## Use TTL.sh, Anonymous & ephemeral Docker image registry
 
 [TTL.sh](https://ttl.sh)
 
