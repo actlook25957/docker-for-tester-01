@@ -1,35 +1,93 @@
 services:
-  store-service:
-    environment:
-      - BANK_GATEWAY=
-      - SHIPPING_GATEWAY=
-      - DBCONNECTION=
-
-  point-service:
-    environment:
-      - DB_HOST=
-      - DB_PORT=
-      - DB_USERNAME=
-      - DB_PASSWORD=
-
   store-db:
+    image: mysql:8.3.0
+    container_name: store-db
     environment:
       - MYSQL_ROOT_PASSWORD=root
       - MYSQL_USER=user
       - MYSQL_PASSWORD=password
       - MYSQL_DATABASE=store
+    volumes:
+      - ./database/store:/docker-entrypoint-initdb.d/
+    ports:
+      - 3306:3306
+    healthcheck:
+      test: ["CMD", "mysql", "-uroot", "-proot", "-e", "select * from store.users"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+      start_period: 5s
+
+  store-service:
+    build:
+      context: ./store-service
+    container_name: store-service
+    image: store-service:1.0
+    environment:
+      - DBCONNECTION=user:password@(store-db:3306)/store
+      - BANK_GATEWAY=bank-gateway:8882
+      - SHIPPING_GATEWAY=shipping-gateway:8882
+    ports:
+      - 8000:8000
+    depends_on: 
+      store-db:
+        condition: service_healthy
+      # - point-service
 
   point-db:
+    image: mysql:8.3.0
+    container_name: point-db
     environment:
       - MYSQL_ROOT_PASSWORD=root
       - MYSQL_USER=user
       - MYSQL_PASSWORD=password
       - MYSQL_DATABASE=point
+    volumes:
+      - ./database/point:/docker-entrypoint-initdb.d/
+    ports:
+      - 3307:3306
+    healthcheck:
+      test: ["CMD", "mysql", "-uroot", "-proot", "-e", "select * from point.points"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+      start_period: 5s
+
+  point-service:
+    build:
+      context: ./point-service
+    container_name: point-service
+    image: point-service:1.0
+    environment:
+      - DB_HOST=point-db
+      - DB_PORT=3306
+      - DB_USERNAME=user
+      - DB_PASSWORD=password
+    ports:
+      - 8001:8001
+    depends_on:
+      point-db:
+        condition: service_healthy
 
   bank-gateway:
+    build:
+      context: thirdparty/bank-gateway
+    image: bank-gateway:1.0
+    container_name: bank-gateway
+    ports:
+      - 8882:8882
 
   shipping-gateway:
+    build:
+      context: thirdparty/shipping-gateway
+    image: shipping-gateway:1.0
+    container_name: shipping-gateway
+    ports:
+      - 8883:8882
+    
+  api-test:
+    build:
+      context: api-test
+    volumes:
+      - ./api-test/report:/etc/newman/newman
 
-  store-web:
-
-  backend-test: 
